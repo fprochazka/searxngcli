@@ -102,7 +102,7 @@ def search_command(
     num: Annotated[
         int,
         typer.Option("--num", "-n", help="Number of results to display."),
-    ] = 50,
+    ] = 25,
     page: Annotated[
         int,
         typer.Option("--page", "-p", help="Page number."),
