@@ -1,0 +1,65 @@
+[project]
+name = "searxngcli"
+version = "0.1.0"
+description = "A command-line interface for SearXNG"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{name = "Filip Procházka", email = "mr@fprochazka.cz"}]
+license = {text = "MIT"}
+keywords = ["searxng", "search", "cli"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+    "Typing :: Typed",
+]
+dependencies = [
+    "httpx>=0.28.0",
+    "pyyaml>=6.0",
+    "rich>=14.0.0",
+    "typer>=0.21.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/fprochazka/searxngcli"
+Repository = "https://github.com/fprochazka/searxngcli"
+Issues = "https://github.com/fprochazka/searxngcli/issues"
+
+[project.scripts]
+searxng = "searxngcli.cli:cli"
+
+[tool.uv]
+package = true
+
+[tool.uv.sources]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/searxngcli"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "C4", "SIM"]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "ruff>=0.14.14",
+]
