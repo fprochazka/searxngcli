@@ -63,6 +63,10 @@ searxng categories
 searxng config show
 ```
 
+## Claude Code
+
+A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill is available for this project, allowing Claude to use the `searxng` CLI autonomously. See [searxngcli skill](https://github.com/fprochazka/claude-code-plugins/tree/master/plugins/searxngcli) for installation and usage instructions.
+
 ## Development
 
 ```bash
