@@ -82,7 +82,7 @@ claude plugin marketplace update fprochazka-searxngcli
 claude plugin update searxngcli@fprochazka-searxngcli
 ```
 
-Claude loads the skill on its own when a task needs a web search. The skill auto-approves every `searxng` command.
+Claude loads the skill on its own when a task needs a web search. The skill auto-approves every `searxng` and `jq` command in the turn that loads it, so that it can filter the JSON output.
 
 ## Development
 
