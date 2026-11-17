@@ -6,8 +6,11 @@ from .logging import console
 from .models import EngineInfo, SearchResponse
 
 
-def print_results(response: SearchResponse, num: int = 10) -> None:
-    """Print formatted search results."""
+def print_results(response: SearchResponse, num: int = 10, verbose: bool = False) -> None:
+    """Print formatted search results.
+
+    The engines, category and score of each result show only when `verbose` is set: they rarely help pick a result.
+    """
     if not response.results:
         console.print("[yellow]No results found.[/yellow]")
         return
@@ -20,14 +23,15 @@ def print_results(response: SearchResponse, num: int = 10) -> None:
         console.print(f"   [dim]{result.url}[/dim]", soft_wrap=True)
         if result.content:
             console.print(f"   {result.content}")
-        engines_str = ", ".join(result.engines) if result.engines else result.engine
         meta_parts = []
-        if engines_str:
-            meta_parts.append(f"engines: {engines_str}")
-        if result.category:
-            meta_parts.append(f"category: {result.category}")
-        if result.score:
-            meta_parts.append(f"score: {result.score:.1f}")
+        if verbose:
+            engines_str = ", ".join(result.engines) if result.engines else result.engine
+            if engines_str:
+                meta_parts.append(f"engines: {engines_str}")
+            if result.category:
+                meta_parts.append(f"category: {result.category}")
+            if result.score:
+                meta_parts.append(f"score: {result.score:.1f}")
         if result.published_date:
             meta_parts.append(f"date: {result.published_date}")
         if meta_parts:

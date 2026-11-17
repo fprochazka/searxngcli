@@ -55,7 +55,7 @@ def main(
         typer.Option(
             "--verbose",
             "-v",
-            help="Enable debug logging.",
+            help="Enable debug logging, and show the engines, category and score of each search result.",
             is_eager=True,
         ),
     ] = False,
@@ -162,7 +162,7 @@ def search_command(
             )
         )
     else:
-        print_results(response, num=num)
+        print_results(response, num=num, verbose=_ctx.verbose)
 
 
 @app.command("engines")

@@ -51,3 +51,36 @@ def test_piped_engines_table_is_not_wrapped(monkeypatch: pytest.MonkeyPatch) -> 
     formatter.print_engines([EngineInfo(name="a search engine with a long name", categories=categories)])
 
     assert any(", ".join(categories) in line for line in out.getvalue().splitlines())
+
+
+def _scored_response() -> SearchResponse:
+    result = SearchResult(
+        title="TaskGroup",
+        url="https://example.com",
+        engines=["brave", "bing"],
+        category="general",
+        score=2.5,
+        published_date="2025-07-30T00:00:00",
+    )
+    return SearchResponse(query="python asyncio taskgroup", results=[result], number_of_results=1)
+
+
+def test_results_leave_out_engines_category_and_score(monkeypatch: pytest.MonkeyPatch) -> None:
+    out = _use_console(monkeypatch)
+
+    formatter.print_results(_scored_response())
+
+    lines = out.getvalue().splitlines()
+    assert "   date: 2025-07-30T00:00:00" in lines
+    assert not any("engines:" in line or "category:" in line or "score:" in line for line in lines)
+
+
+def test_verbose_results_show_engines_category_and_score(monkeypatch: pytest.MonkeyPatch) -> None:
+    out = _use_console(monkeypatch)
+
+    formatter.print_results(_scored_response(), verbose=True)
+
+    assert (
+        "   engines: brave, bing | category: general | score: 2.5 | date: 2025-07-30T00:00:00"
+        in out.getvalue().splitlines()
+    )

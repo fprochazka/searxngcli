@@ -50,6 +50,9 @@ searxng search "test" -n 5 -p 2
 # Filter by time range
 searxng search "latest updates" -t week
 
+# Also show the engines, category and score of each result (and debug logs)
+searxng search "python asyncio" -v
+
 # JSON output (for scripting)
 searxng search "test" --json
 
