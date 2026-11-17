@@ -72,17 +72,21 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill is availab
 ```bash
 git clone https://github.com/fprochazka/searxngcli.git
 cd searxngcli
-uv sync
+uv sync --dev
 
 # Run from source
 uv run searxng search "test"
 
-# Lint
-uv run ruff check src/
+# Lint, format check and type check
+uv run ruff check .
+uv run ruff format --check .
+uv run mypy
 
 # Test
 uv run pytest
 ```
+
+The project needs Python 3.12 or newer. CI runs the same checks, and the tests on Python 3.12 to 3.15. `uv run ruff format .` fixes the formatting.
 
 ### Commit hooks
 
