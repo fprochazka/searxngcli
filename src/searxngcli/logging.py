@@ -1,11 +1,29 @@
 """Logging configuration for SearXNG CLI."""
 
 import logging
+from typing import Any
 
 from rich.console import Console
 from rich.logging import RichHandler
 
-console = Console()
+# Width of output that does not go to a terminal: tables size to their content instead of wrapping cells.
+UNLIMITED_WIDTH = 10_000
+
+
+def create_console(**kwargs: Any) -> Console:
+    """Create a console that wraps text only when it writes to a terminal.
+
+    Rich wraps at 80 columns when it cannot measure a terminal, which splits long URLs in piped output across lines.
+    """
+    console = Console(**kwargs)
+    if not console.is_terminal:
+        console.soft_wrap = True
+        console.width = UNLIMITED_WIDTH
+    return console
+
+
+console = create_console()
+# Not created by create_console: the log handler renders each record as a table expanded to the console width.
 error_console = Console(stderr=True)
 
 

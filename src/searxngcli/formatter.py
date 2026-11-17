@@ -16,7 +16,8 @@ def print_results(response: SearchResponse, num: int = 10) -> None:
 
     for i, result in enumerate(results, 1):
         console.print(f"\n[bold]{i}. {result.title}[/bold]")
-        console.print(f"   [dim]{result.url}[/dim]")
+        # A terminal wraps a soft-wrapped line only visually, so the URL stays whole when copied.
+        console.print(f"   [dim]{result.url}[/dim]", soft_wrap=True)
         if result.content:
             console.print(f"   {result.content}")
         engines_str = ", ".join(result.engines) if result.engines else result.engine
