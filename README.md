@@ -63,9 +63,23 @@ searxng categories
 searxng config show
 ```
 
-## Claude Code
+## Claude Code Plugin
 
-A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill is available for this project, allowing Claude to use the `searxng` CLI autonomously. See [searxngcli skill](https://github.com/fprochazka/claude-code-plugins/tree/master/plugins/searxngcli) for installation and usage instructions.
+This repository bundles a [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin with a skill that teaches Claude to search the web with the `searxng` CLI. Install and configure the CLI first, then add the marketplace and install the plugin:
+
+```bash
+claude plugin marketplace add fprochazka/searxngcli
+claude plugin install searxngcli@fprochazka-searxngcli
+```
+
+To upgrade after a new version:
+
+```bash
+claude plugin marketplace update fprochazka-searxngcli
+claude plugin update searxngcli@fprochazka-searxngcli
+```
+
+Claude loads the skill on its own when a task needs a web search. The skill auto-approves every `searxng` command.
 
 ## Development
 
@@ -87,6 +101,10 @@ uv run pytest
 ```
 
 The project needs Python 3.12 or newer. CI runs the same checks, and the tests on Python 3.12 to 3.15. `uv run ruff format .` fixes the formatting.
+
+### Plugin version
+
+When you change the plugin, bump its version in both manifests, so that they stay in lockstep: `.claude-plugin/marketplace.json` and `coding-agent-plugins/claude-code/.claude-plugin/plugin.json`. Claude Code offers the update to installed plugins only when the version changes, and users get it once the commit lands on `master`.
 
 ### Commit hooks
 
