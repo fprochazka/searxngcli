@@ -117,7 +117,7 @@ def search_command(
     ] = None,
     output_json: Annotated[
         bool,
-        typer.Option("--json", help="Output raw JSON."),
+        typer.Option("--json", help="Output raw JSON, with at most --num results."),
     ] = False,
 ) -> None:
     """Search using SearXNG."""
@@ -154,7 +154,7 @@ def search_command(
                             "published_date": r.published_date,
                             "thumbnail": r.thumbnail,
                         }
-                        for r in response.results
+                        for r in response.results[:num]
                     ],
                     "suggestions": response.suggestions,
                     "corrections": response.corrections,
