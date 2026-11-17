@@ -4,7 +4,7 @@ from searxngcli.models import EngineInfo, SearchResponse, SearchResult
 
 
 class TestSearchResult:
-    def test_from_dict_full(self):
+    def test_from_dict_full(self) -> None:
         data = {
             "title": "Example",
             "url": "https://example.com",
@@ -27,7 +27,7 @@ class TestSearchResult:
         assert result.published_date == "2025-01-01"
         assert result.thumbnail == "https://example.com/thumb.jpg"
 
-    def test_from_dict_minimal(self):
+    def test_from_dict_minimal(self) -> None:
         result = SearchResult.from_dict({})
         assert result.title == ""
         assert result.url == ""
@@ -36,7 +36,7 @@ class TestSearchResult:
 
 
 class TestSearchResponse:
-    def test_from_dict(self):
+    def test_from_dict(self) -> None:
         data = {
             "query": "test",
             "number_of_results": 100,
@@ -55,14 +55,14 @@ class TestSearchResponse:
         assert response.results[0].title == "Result 1"
         assert response.suggestions == ["test suggestion"]
 
-    def test_from_dict_empty(self):
+    def test_from_dict_empty(self) -> None:
         response = SearchResponse.from_dict({})
         assert response.query == ""
         assert response.results == []
 
 
 class TestEngineInfo:
-    def test_from_dict(self):
+    def test_from_dict(self) -> None:
         data = {
             "name": "google",
             "categories": ["general"],

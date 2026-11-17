@@ -1,6 +1,7 @@
 """Data models for SearXNG CLI."""
 
 from dataclasses import dataclass, field
+from typing import Any
 
 
 @dataclass
@@ -18,7 +19,7 @@ class SearchResult:
     thumbnail: str = ""
 
     @classmethod
-    def from_dict(cls, data: dict) -> "SearchResult":
+    def from_dict(cls, data: dict[str, Any]) -> "SearchResult":
         return cls(
             title=data.get("title", ""),
             url=data.get("url", ""),
@@ -44,7 +45,7 @@ class SearchResponse:
     unresponsive_engines: list[list[str]] = field(default_factory=list)
 
     @classmethod
-    def from_dict(cls, data: dict) -> "SearchResponse":
+    def from_dict(cls, data: dict[str, Any]) -> "SearchResponse":
         return cls(
             query=data.get("query", ""),
             number_of_results=data.get("number_of_results", 0),
@@ -65,7 +66,7 @@ class EngineInfo:
     enabled: bool = True
 
     @classmethod
-    def from_dict(cls, data: dict) -> "EngineInfo":
+    def from_dict(cls, data: dict[str, Any]) -> "EngineInfo":
         return cls(
             name=data.get("name", ""),
             categories=data.get("categories", []),

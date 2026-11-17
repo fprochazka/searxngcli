@@ -1,5 +1,7 @@
 """SearXNG HTTP client."""
 
+from typing import Any
+
 import httpx
 
 from .logging import get_logger
@@ -59,14 +61,15 @@ class SearXNGClient:
 
         return SearchResponse.from_dict(data)
 
-    def get_config(self) -> dict:
+    def get_config(self) -> dict[str, Any]:
         """Get the SearXNG instance configuration."""
         response = httpx.get(
             f"{self.base_url}/config",
             timeout=self.timeout,
         )
         response.raise_for_status()
-        return response.json()
+        config: dict[str, Any] = response.json()
+        return config
 
     def get_engines(self) -> list[EngineInfo]:
         """Get list of available engines."""
@@ -77,4 +80,5 @@ class SearXNGClient:
     def get_categories(self) -> list[str]:
         """Get list of available categories."""
         config = self.get_config()
-        return config.get("categories", [])
+        categories: list[str] = config.get("categories", [])
+        return categories
