@@ -8,95 +8,28 @@ allowed-tools: Bash(searxng:*)
 
 # searxngcli
 
-Search the web via a private SearXNG metasearch engine instance using the `searxng` CLI.
+The `searxng` CLI searches the web through a private SearXNG instance, which merges the results of several search engines.
 
-SearXNG aggregates results from multiple search engines (Google, Bing, DuckDuckGo, etc.) and supports engine-specific operators like `site:`, `filetype:`, `intitle:` — these are passed through to backend engines as-is.
-
-## Usage
-
-Always use `--json` for machine-readable output. Always quote the query string.
+## Search
 
 ```bash
-# Basic search
-searxng search "python asyncio" --json
-
-# Filter by category (general, images, news, videos, music, files, it, science, social media)
-searxng search "breaking news" --categories news --json
-
-# Filter by specific engines
-searxng search "rust" --engines google,duckduckgo --json
-
-# Filter by time range (day, week, month, year)
-searxng search "latest updates" --time-range week --json
-
-# Combine filters
-searxng search "climate change" --categories news --time-range month --num 20 --json
-
-# Use search engine operators (passed through to engines)
-searxng search "site:github.com python cli" --json
+searxng search "python asyncio taskgroup"
 ```
 
-### Search Options
+The text output lists each result as a title, its URL on one line, a snippet, and the engines that found it. Run one search per phrasing of the question; when the results miss, rephrase and search again. Pick results by their title and snippet before fetching any page.
 
-| Flag | Description |
-|------|-------------|
-| `--categories` | Comma-separated categories |
-| `--engines` | Comma-separated engines |
-| `--language` | Language code (en, de, cs, etc.) |
-| `--num` | Number of results (default: 25) |
-| `--page` | Page number (default: 1) |
-| `--time-range` | day, week, month, year |
-| `--safe-search` | 0=off, 1=moderate, 2=strict |
-| `--json` | Raw JSON output |
+## Narrow the search when it helps
 
-## Discovery
+- `--time-range day|week|month|year` for news, releases and other recent topics.
+- Search operators inside the query, which the engines receive as they are: `"site:docs.python.org taskgroup"`, `"filetype:pdf postgresql locking"`.
+- `--num 5` for a quick lookup. A larger `--num` does not fetch more results, because the CLI shows only the one page the instance returns.
 
-```bash
-# List available engines on the instance
-searxng engines
+## Mistakes to avoid
 
-# List available categories
-searxng categories
-```
+- Quote the whole query, so the shell passes it as one argument.
+- Put the flags after `search`: `searxng search "query" --time-range week`, not `searxng --time-range week search "query"`.
+- Leave `--categories`, `--engines` and `--language` out unless the user asks for them. The instance has good defaults.
+- Use `--json` only to get a field the text output lacks. It is about eight times larger than the text output.
+- If the CLI reports that it is not configured, ask the user for the URL of their SearXNG instance.
 
-## Output Format
-
-The `--json` output is a JSON object with these top-level fields:
-
-```json
-{
-  "query": "search terms",
-  "number_of_results": 100,
-  "results": [
-    {
-      "title": "asyncio — Asynchronous I/O — Python 3.14.3 documentation",
-      "url": "https://docs.python.org/3/library/asyncio.html",
-      "content": "asyncio is a library to write concurrent code using the async/await syntax...",
-      "engine": "google",
-      "engines": ["braveapi", "google", "startpage"],
-      "category": "general",
-      "score": 9.0,
-      "published_date": "2025-07-30T00:00:00",
-      "thumbnail": ""
-    }
-  ],
-  "suggestions": ["related query 1", "related query 2"],
-  "corrections": []
-}
-```
-
-**Never pipe through `grep`, `head`, `tail`, or similar text tools** — the output is already structured JSON. Use `jq` if filtering is needed:
-
-```bash
-# Extract just URLs
-searxng search "python asyncio" --json | jq -r '.results[].url'
-
-# Extract title and URL pairs
-searxng search "python asyncio" --json | jq '.results[] | {title, url}'
-```
-
-## Important Notes
-
-- **Prefer defaults** — do not use `-c`, `-e`, or `-l` flags unless there is a clear reason to narrow the scope (e.g., user explicitly asks for news, or for results from a specific engine). The instance is pre-configured with good defaults.
-- Place all flags **after** the subcommand: `searxng search "query" --json` (not `searxng --json search "query"`)
-- If the CLI is not configured, ask the user for their SearXNG instance URL
+Everything else: `searxng search --help`.
